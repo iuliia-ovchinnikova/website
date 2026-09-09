@@ -138,7 +138,7 @@
 <h2 class="shape__title2 part-mne">СО МНОЙ</h2> 
 </div>
 
-<form class="shape__form" action="https://formspree.io/f/xrpgodvd" method="POST">
+<form id="contact-form" class="shape_form" data-fs-form>
 <div class="shape__form-group">
 <h3 class="shape__form-header">Оставить заявку</h3>  
 <label for="name" class="shape__form-label"></label>
@@ -155,8 +155,17 @@
 <textarea id="message" name="message" rows="5" placeholder="Задай вопрос" required class="shape__form-input2"></textarea>
 </div>
 
-<button type="submit" class="shape__form-btn">Отправить</button>
+<button type="submit" class="shape__form-btn" data-fs-submit-btn>Отправить</button>
 </form>
+
+<div id="success-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center;">
+  <div style="background: white; padding: 40px; border-radius: 12px; text-align: center;">
+    <h3 style="color: #2ecc71;">Спасибо!</h3>
+    <p>Ваша заявка успешно отправлена.</p>
+    <button id="close-modal" style="margin-top: 20px; padding: 10px 20px; cursor: pointer;">Закрыть</button>
+  </div>
+</div>
+
 
 
 
@@ -165,6 +174,43 @@
 </section>
 
 
+
+<!-- Подключение библиотеки Formspree -->
+<script src="https://unpkg.com/@formspree/ajax@1"></script>
+
+<!-- Логика формы -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('contact-form');
+    
+    if (form) {
+      formspree('initForm', { 
+        formElement: form, 
+        formId: 'xrpgodvd' // <-- Твой ID формы
+      });
+
+      form.addEventListener('formspree:success', function(e) {
+        form.style.display = 'none';
+        const modal = document.getElementById('success-modal');
+        if (modal) modal.style.display = 'flex';
+        form.reset();
+      });
+
+      form.addEventListener('formspree:error', function(e) {
+        alert('Ошибка отправки. Проверьте консоль.');
+      });
+    }
+
+    const closeBtn = document.getElementById('close-modal');
+    const modal = document.getElementById('success-modal');
+    
+    if (closeBtn && modal) {
+      closeBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+      });
+    }
+  });
+</script>
 
       
   </body>
